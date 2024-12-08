@@ -1,0 +1,64 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+
+using namespace std;
+
+char obtenerVocalInterna(const string &apellidoPaterno) {
+    for (size_t i = 1; i < apellidoPaterno.length(); ++i) {
+        char c = toupper(apellidoPaterno[i]);
+        if (c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U') {
+            return c;
+        }
+    }
+    return 'X';
+}
+string toUpperCase(string str) {
+    for (char &c : str) {
+        c = toupper(c);
+    }
+    return str;
+}
+
+string generarRFC(string nombre, string apellidoPaterno, string apellidoMaterno, string fechaNacimiento) {
+    string rfc;
+
+    rfc += toupper(apellidoPaterno[0]);
+
+    rfc += obtenerVocalInterna(apellidoPaterno);
+
+    if (!apellidoMaterno.empty()) {
+        rfc += toupper(apellidoMaterno[0]);
+    } else {
+        rfc += 'X';
+    }
+    rfc += toupper(nombre[0]);
+
+    rfc += fechaNacimiento;
+
+    return rfc;
+}
+
+int main() {
+    string nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento;
+    
+    cout << "Cálculo de RFC" << endl;
+    cout << "Ingresa tu nombre: ";
+    getline(cin, nombre);
+    cout << "Ingresa tu apellido paterno: ";
+    getline(cin, apellidoPaterno);
+    cout << "Ingresa tu apellido materno (si no tienes, deja vacío): ";
+    getline(cin, apellidoMaterno);
+    cout << "Ingresa tu fecha de nacimiento en formato AAMMDD: ";
+    cin >> fechaNacimiento;
+
+    nombre = toUpperCase(nombre);
+    apellidoPaterno = toUpperCase(apellidoPaterno);
+    apellidoMaterno = toUpperCase(apellidoMaterno);
+
+    string rfc = generarRFC(nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento);
+
+    cout << "Tu RFC (sin homoclave) es: " << rfc << endl;
+
+    return 0;
+}
